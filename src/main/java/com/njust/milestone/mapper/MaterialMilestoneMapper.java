@@ -35,8 +35,14 @@ public interface MaterialMilestoneMapper extends BaseMapper<MaterialMilestone> {
     @Select("call generateMaterialMilestone()")
     void generateMaterialMilestone();
 
+    /**
+     * 获取最新的里程碑信息
+     **/
     List<MaterialMilestone> findRecentMilestone(@Param("start") Integer start, @Param("end") Integer end);
 
+    /**
+     * 获取总数
+     **/
     Long getMaterialMilestoneTotal();
 
 }

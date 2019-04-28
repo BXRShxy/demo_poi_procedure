@@ -5,8 +5,13 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.Properties;
 
+/**
+ * 连接数据库
+ *
+ * @author 修身 since 2018/10/23
+ **/
+
 public class DBUtil {
-    private static String driver;
     private static String username;
     private static String pwd;
     private static String url;
@@ -26,11 +31,9 @@ public class DBUtil {
             url = props.getProperty("url");
             username = props.getProperty("username");
             pwd = props.getProperty("password");
-            driver = props.getProperty("driver-class-name");
+            String driver = props.getProperty("driver-class-name");
             Class.forName(driver);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

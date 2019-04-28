@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.njust.milestone.mapper.MaterialMilestoneMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.njust.milestone.entity.MaterialMilestone">
+        <id column="id" property="id" />
+        <result column="project_code" property="projectCode" />
+        <result column="project_name" property="projectName" />
+        <result column="engineer_code" property="engineerCode" />
+        <result column="engineer_name" property="engineerName" />
+        <result column="engineer_voltage_level" property="engineerVoltageLevel" />
+        <result column="engineer_property" property="engineerProperty" />
+        <result column="construction_property" property="constructionProperty" />
+        <result column="start_time" property="startTime" />
+        <result column="incontroller_start_time" property="incontrollerStartTime" />
+        <result column="project_keyan_audit_time" property="projectKeyanAuditTime" />
+        <result column="project_approval_time" property="projectApprovalTime" />
+        <result column="project_firstreview_time" property="projectFirstreviewTime" />
+        <result column="material_calibration_time" property="materialCalibrationTime" />
+        <result column="product_time" property="productTime" />
+        <result column="completion_settlement" property="completionSettlement" />
+        <result column="project_manager" property="projectManager" />
+        <result column="project_phone" property="projectPhone" />
+        <result column="construction_manager" property="constructionManager" />
+        <result column="construction_phone" property="constructionPhone" />
+        <result column="material_unique_code" property="materialUniqueCode" />
+        <result column="material_code" property="materialCode" />
+        <result column="material_description" property="materialDescription" />
+        <result column="material_expansion_code" property="materialExpansionCode" />
+        <result column="material_expansion_description" property="materialExpansionDescription" />
+        <result column="big_class" property="bigClass" />
+        <result column="middle_class" property="middleClass" />
+        <result column="small_class" property="smallClass" />
+        <result column="standard_material" property="standardMaterial" />
+        <result column="require_num" property="requireNum" />
+        <result column="reported_num" property="reportedNum" />
+        <result column="unit" property="unit" />
+        <result column="planned_batch_name" property="plannedBatchName" />
+        <result column="planned_batch_number" property="plannedBatchNumber" />
+        <result column="estimated_unit_price" property="estimatedUnitPrice" />
+        <result column="estimated_total_price" property="estimatedTotalPrice" />
+        <result column="delivery_date" property="deliveryDate" />
+        <result column="delivery_place" property="deliveryPlace" />
+        <result column="editor" property="editor" />
+        <result column="electronic_id" property="electronicId" />
+        <result column="report_state" property="reportState" />
+        <result column="reasonable_delivery_time" property="reasonableDeliveryTime" />
+        <result column="latest_report_batch" property="latestReportBatch" />
+        <result column="best_report_batch" property="bestReportBatch" />
+        <result column="last_batch_type" property="lastBatchType" />
+        <result column="best_batch_type" property="bestBatchType" />
+        <result column="supply_plan_latest_time" property="supplyPlanLatestTime" />
+        <result column="remission_feedback" property="remissionFeedback" />
+        <result column="supplier_contact_phone" property="supplierContactPhone" />
+        <result column="contract_delivery_date" property="contractDeliveryDate" />
+        <result column="certain_delivery_date" property="certainDeliveryDate" />
+        <result column="material_actual_delivery" property="materialActualDelivery" />
+        <result column="draw_lead_date" property="drawLeadDate" />
+        <result column="technology_background_date" property="technologyBackgroundDate" />
+        <result column="keymaterial_product_time" property="keymaterialProductTime" />
+        <result column="keymaterial_test_date" property="keymaterialTestDate" />
+        <result column="material_arrival_date" property="materialArrivalDate" />
+        <result column="storage_date" property="storageDate" />
+        <result column="first_outage_date" property="firstOutageDate" />
+        <result column="payment_date" property="paymentDate" />
+        <result column="material_delivery_time" property="materialDeliveryTime" />
+        <result column="material_warranty_time" property="materialWarrantyTime" />
+        <result column="material_arrival_status" property="materialArrivalStatus" />
+        <result column="remark" property="remark" />
+        <result column="last_operator" property="lastOperator" />
+        <result column="update_time" property="updateTime" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, project_code, project_name, engineer_code, engineer_name, engineer_voltage_level, engineer_property, construction_property, start_time,
+        incontroller_start_time, project_keyan_audit_time, project_approval_time, project_firstreview_time, material_calibration_time, product_time,
+        completion_settlement, project_manager, project_phone, construction_manager, construction_phone, material_unique_code, material_code,
+        material_description, material_expansion_code, material_expansion_description, big_class, middle_class, small_class, standard_material,
+        require_num, reported_num, unit, planned_batch_name, planned_batch_number, estimated_unit_price, estimated_total_price, delivery_date,
+        delivery_place, editor, electronic_id, report_state, reasonable_delivery_time, latest_report_batch, best_report_batch, last_batch_type,
+        best_batch_type, supply_plan_latest_time, remission_feedback, supplier_contact_phone, contract_delivery_date, certain_delivery_date,
+        material_actual_delivery, draw_lead_date, technology_background_date, keymaterial_product_time, keymaterial_test_date, material_arrival_date,
+        storage_date, first_outage_date, payment_date, material_delivery_time, material_warranty_time, material_arrival_status, remark, last_operator,
+         update_time, create_time
+    </sql>
+
+
+    <select id="listOfPage" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from lcb_material_milestone as a
+        <where>
+            <if test="projectName!=null and projectName!=''">
+                AND project_name like "%${projectName}%"
+            </if>
+            <if test="engineerName!=null and engineerName!=''">
+                AND engineer_name like "%${engineerName}%"
+            </if>
+            <if test="projectManager!=null and projectManager!=''">
+                AND project_manager like "%${projectManager}%"
+            </if>
+        </where>
+        order by a.create_time desc , a.engineer_code asc
+        limit #{start} ,#{end}
+    </select>
+
+    <select id="totalOfList" resultType="java.lang.Long">
+        SELECT COUNT(engineer_code) from lcb_material_milestone
+        <where>
+            <if test="projectName!=null and projectName!=''">
+                AND project_name like "%${projectName}%"
+            </if>
+            <if test="engineerName!=null and engineerName!=''">
+                AND engineer_name like "%${engineerName}%"
+            </if>
+            <if test="projectManager!=null and projectManager!=''">
+                AND project_manager like "%${projectManager}%"
+            </if>
+        </where>
+    </select>
+
+    <select id="findRecentMilestone" resultMap="BaseResultMap">
+        select * from lcb_material_milestone as a where a.update_time = (select MAX(update_time) from lcb_material_milestone as b
+		where (b.engineer_code = a.engineer_code AND b.material_code = a.material_code and b.material_expansion_code = a.material_expansion_code)
+		OR (b.engineer_code = a.engineer_code AND b.material_code is null AND b.material_expansion_code is null))
+		order by a.create_time desc , a.engineer_code asc
+        limit #{start} ,#{end}
+    </select>
+
+    <select id="getMaterialMilestoneTotal" resultType="java.lang.Long">
+        select COUNT(id) from lcb_material_milestone as a where a.update_time = (select MAX(update_time) from lcb_material_milestone as b
+		where (b.engineer_code = a.engineer_code AND b.material_code = a.material_code and b.material_expansion_code = a.material_expansion_code)
+		OR (b.engineer_code = a.engineer_code AND b.material_code is null AND b.material_expansion_code is null))
+    </select>
+
+</mapper>

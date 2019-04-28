@@ -1,0 +1,147 @@
+<!--
+Created by 修身 on 2019/4/25
+Change above in File | Settings | File and Code Templates | Files.
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common::html" title="物资里程碑">
+</head>
+<body>
+
+<script type="text/javascript">
+    var materialMilestoneDataGrid;
+
+    $(function () {
+        //dg初始化
+        materialMilestoneDataGrid = $('#materialMilestoneDataGrid').datagrid({
+            //请求数据的url
+            url: basePath + '/materialMilestone/pagingMaterialMilestone',
+            //载入提示信息
+            loadMsg: '数据加载中，请稍等...',
+            //水平自动展开，如果设置此属性，则不会有水平滚动条，演示冻结列时，该参数不要设置
+            fitColumns: false,
+            //数据多的时候不换行
+            nowrap: true,
+            fit:true,
+            //设置分页
+            pagination: true,
+            //设置每页显示的记录数，默认是10个
+            pageSize: 20,
+            //每页显示记录数项目
+            pageList: [20, 50, 75, 100],
+            //指定id为标识字段，在删除，更新的时候有用，如果配置此字段，在翻页时，换页不会影响选中的项
+            idField: 'id',
+            //autoRowHeight:true,
+            //添加序号列
+            rownumbers: true,
+            //行条纹化，即奇偶行使用不同背景色
+            striped: true,
+            //上方工具条 添加 修改 删除 刷新按钮
+            toolbar: [{
+                iconCls: 'glyphicon-copy icon-green',    //图标
+                text: '获取最新物资里程碑',            //名称
+                handler: function () {
+                    progressLoad();
+                    $.ajax({
+                        url: basePath + '/materialMilestone/pagingLatestMilestone',
+                        type: 'post',
+                        success: function () {
+                            progressClose();
+                            $("#materialMilestoneDataGrid").datagrid("reload");
+                            $.messager.alert("系统提示", "获取结束");
+                        },
+                        error: function () {
+                            $.messager.alert("系统提示", "获取错误，请稍后重试 ...");
+                        }
+                    });
+                }
+            }],
+            columns:
+                [
+                    [
+                        {field: 'checkbox', checkbox: true},    //复选框
+                        {field: 'projectCode', title: '项目编码', align: 'center', width: 120},
+                        {field: 'projectName', title: '项目名称', align: 'center', width: 350},
+                        {field: 'engineerCode', title: '工程编码', align: 'center', width: 200},
+                        {field: 'engineerName', title: '工程名称', align: 'center', width: 350},
+                        {field: 'engineerVoltageLevel', title: '工程电压等级', align: 'center', width: 90},
+                        {field: 'engineerProperty', title: '工程性质', align: 'center', width: 60},
+                        {field: 'constructionProperty', title: '建设性质', align: 'center', width: 60},
+                        {field: 'startTime', title: '开工时间', align: 'center', width: 80},
+                        // {field: 'incontrollerStartTime', title: '内控开工时间', align: 'center', width: 100},
+                        // {field: 'projectKeyanAuditTime', title: '项目可研批复时间', align: 'center', width: 100},
+                        // {field: 'projectApprovalTime', title: '项目核准时间', align: 'center', width: 100},
+                        {field: 'projectFirstreviewTime', title: '项目初设评审时间', align: 'center', width: 100},
+                        // {field: 'materialCalibrationTime', title: '物资定标时间', align: 'center', width: 100},
+                        {field: 'productTime', title: '投产时间', align: 'center', width: 100},
+                        // {field: 'completionSettlement', title: '竣工结算', align: 'center', width: 100},
+                        {field: 'projectManager', title: '项目经理', align: 'center', width: 80},
+                        {field: 'projectPhone', title: '联系电话', align: 'center', width: 100},
+                        // {field: 'constructionManager', title: '施工单位经理', align: 'center', width: 100},
+                        // {field: 'constructionPhone', title: '联系电话', align: 'center', width: 100},
+                        {field: 'materialUniqueCode', title: '批次号/物资唯一码', align: 'center', width: 100},
+                        {field: 'materialCode', title: '物料编码', align: 'center', width: 100},
+                        {field: 'materialDescription', title: '物料描述', align: 'center', width: 300},
+                        {field: 'materialExtensionCode', title: '物料扩展描述', align: 'center', width: 300},
+                        {field: 'bigClass', title: '大类', align: 'center', width: 100},
+                        {field: 'middleClass', title: '中类', align: 'center', width: 120},
+                        {field: 'smallClass', title: '小类', align: 'center', width: 150},
+                        {field: 'materialName', title: '物资名称', align: 'center', width: 100},
+                        {field: 'materialVoltageLevel', title: '物料电压等级', align: 'center', width: 100},
+                        {field: 'quantity', title: '数量', align: 'center', width: 100},
+                        {field: 'measurementUnit', title: '计量单位', align: 'center', width: 100},
+                        {field: 'reasonableDeliveryTime', title: '合理交货时间', align: 'center', width: 100},
+                        {field: 'latestReportBatch', title: '最迟申报批次', align: 'center', width: 100},
+                        {field: 'bestReportBatch', title: '最佳申报批次', align: 'center', width: 100},
+                        {field: 'supplyPlanLatestTime', title: '供应计划调整最迟时间', align: 'center', width: 100},
+                        {field: 'bidType', title: '招标类型', align: 'center', width: 100},
+                        {field: 'declaredQuantity', title: '已申报数量', align: 'center', width: 100},
+                        {field: 'materialPlanTime', title: '物资计划实际上报批次(时间)', align: 'center', width: 100},
+                        {field: 'contractDeliveryTime', title: '合同交货日期', align: 'center', width: 100},
+                        {field: 'determinedDeliveryDate', title: '确定交货期', align: 'center', width: 100},
+                        {field: 'materialActualDeliveryTime', title: '物资实际需求交货期', align: 'center', width: 100},
+                        {field: 'supplierContactPhone', title: '供应商、联系人及联系方式', align:'center', width: 100},
+                        {field: 'drawLeadDate', title: '图纸交付时间', align: 'center', width: 100},
+                        {field: 'keymaterialProductionTime', title: '重点物资排产时间(生产周期)', align: 'center', width: 100},
+                        {field: 'keymaterialCcsyTime', title: '重点物资出厂试验时间(关键点见证时间)', align: 'center', width: 100},
+                        {field: 'materialWarrantyTime', title: '物资质保时间', align: 'center', width: 100},
+                        {field: 'technologyBackgroundDate', title: '技术交底时间', align: 'center', width: 100},
+                        {field: 'storageDate', title: '入库时间', align: 'center', width: 100},
+                        {field: 'firstOutageDate', title: '出库时间', align: 'center', width: 100},
+                        {field: 'paymentDate', title: '交票时间', align: 'center', width: 100},
+                        {field: 'updateTime', title: '更新时间', align: 'center', width: 150},
+                        {field: 'createTime', title: '创建时间', align: 'center', width: 150}
+                    ]
+                ]
+        });
+    });
+
+    //条件查询
+    function searchMaterialMilestone() {
+        $("#materialMilestoneDataGrid").datagrid("load", {
+            "projectName": $("#projectName").val(),
+            "engineerName": $("#engineerName").val(),
+            "projectManager": $("#projectManager").val()
+        });
+    }
+
+</script>
+
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <!--<div data-options="region:'north',border:false" style="margin-left: 20px;">-->
+        <!--<form>-->
+            <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
+            <!--项目名称： <input class="easyui-textbox" id="projectName" style="width:200px;height: 25px" placeholder="">-->
+            <!--工程名称： <input class="easyui-textbox" id="engineerName" style="width:200px;height: 25px" placeholder="">-->
+            <!--项目经理： <input class="easyui-textbox" id="projectManager" style="width:100px;height: 25px" placeholder="">-->
+            <!--<a href="javascript:searchMaterialMilestone()" class="easyui-linkbutton" iconCls="icon-search" style="width:70px;height: 35px">搜&nbsp;索</a>-->
+        <!--</form>-->
+    <!--</div>-->
+
+    <div data-options="region:'center',border:true,title:'物资里程碑'">
+        <table id="materialMilestoneDataGrid" style="height: auto;width: 100%"></table>
+    </div>
+</div>
+
+</body>
+</html>

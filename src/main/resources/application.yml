@@ -1,0 +1,35 @@
+server:
+  port: 8080
+  servlet:
+      # 系统访问路径
+      context-path: /
+
+spring:
+  thymeleaf:
+      cache: false
+  #数据库配置
+  datasource:
+#    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #本地数据库
+#    url: jdbc:mysql://127.0.0.1:3306/demo_poi?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&useSSL=false&serverTimezone=Asia/Shanghai
+#    username: root
+#    password: admin
+
+    #本地数据库
+    url: jdbc:mysql://58.213.48.27:3306/demo_poi?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&useSSL=false&serverTimezone=Asia/Shanghai
+#    url: jdbc:mysql://192.168.70.228:3306/demo_poi?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: lyw123456
+
+  mvc:
+    throw-exception-if-no-handler-found: true
+    static-path-pattern: /static/**
+
+# mybatis-plus配置
+mybatis-plus:
+  configuration:
+    cache-enabled: false
+    map-underscore-to-camel-case: true
+  typeAliasesPackage: com.njust.milestone.mapper
+  mapper-locations: classpath:com/njust/milestone/mapper/*Mapper.xml

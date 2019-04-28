@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common::html" title="导入Excel">
+</head>
+<body>
+
+<script type="text/javascript">
+    $(function () {
+        $('#importExcelForm').form({
+            onSubmit: function () {
+                progressLoad();
+                $("#importExcelForm").ajaxSubmit({
+                    url: basePath + '/excel/importExcel',
+                    type: "post",
+                    dataType: "json",//预期服务器返回的数据类型
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        progressClose();
+                        if (result.success) {
+                            //之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为jsp页面预定义好了
+                            parent.$.messager.alert('系统提示', result.msg, 'info');
+                            parent.$.modalDialog.openner_dataGrid.datagrid('reload');
+                            parent.$.modalDialog.handler.dialog('close');
+                        } else {
+                            parent.$.messager.alert('系统提示', result.msg, 'warning');
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+</script>
+
+<div data-options="region:'center',border:false" title="导入" style="padding: 3px;">
+    <form id="importExcelForm" method="post" enctype="multipart/form-data" style="text-align: center">
+        <table>
+            <br> <br>
+            <input id="type" name="type" type="hidden" value="projectMilestone">
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="fileContent" type="file" name="fileContent">
+        </table>
+    </form>
+</div>
+
+</body>
+</html>

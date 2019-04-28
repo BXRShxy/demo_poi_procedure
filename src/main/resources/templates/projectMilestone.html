@@ -1,0 +1,135 @@
+<!--
+    Created by  修身 on 2019/4/25
+    Change above in File | Settings | File and Code Templates | Files.
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common::html" title="项目里程碑">
+</head>
+<body>
+
+<script type="text/javascript" th:inline="javascript">
+    var projectMilestoneDataGrid;
+
+    $(function () {
+        //datagrid初始化
+        projectMilestoneDataGrid = $('#projectMilestoneDataGrid').datagrid({
+            //请求数据的url
+            url: basePath + '/projectMilestone/pagingProjectMilestone',
+            //collapsible:true,
+            //载入提示信息
+            loadMsg: '数据加载中，请稍等...',
+            //水平自动展开，如果设置此属性，则不会有水平滚动条，演示冻结列时，该参数不要设置
+            fitColumns: false,
+            fit: true,
+            //数据多的时候不换行
+            nowrap: true,
+            //设置分页
+            pagination: true,
+            //设置每页显示的记录数，默认是10个
+            pageSize: 20,
+            //每页显示记录数项目
+            pageList: [10, 20, 50, 100],
+            //指定id为标识字段，在删除，更新的时候有用，如果配置此字段，在翻页时，换页不会影响选中的项
+            idField: 'id',
+            //添加序号列
+            rownumbers: true,
+            //行条纹化，即奇偶行使用不同背景色
+            striped: true,
+            //上方工具条 添加 修改 删除 刷新按钮
+            toolbar:
+                [
+                    {
+                        text: '刷新',
+                        iconCls: 'icon-reload',
+                        handler: function () {
+                            projectMilestoneDataGrid.datagrid("reload");
+                            projectMilestoneDataGrid.datagrid("unselectAll");
+                        }
+                    },
+                    '-',
+                    {
+                        text: '导入',
+                        iconCls: 'glyphicon-import icon-green',
+                        handler: toImport
+                    }
+                ],
+            columns:
+                [
+                    [
+                        {field: 'checkbox', checkbox: true},    //复选框
+                        {field: 'engineerCode', title: '<b>工程编码</b><span style= "color:red">*</span>', align: 'center', width: 100},
+                        {field: 'engineerName', title: '<b>工程名称</b><span style= "color:red">*</span>', align: 'center', width: 400},
+                        {field: 'projectCode', title: '<b>项目编码</b><span style= "color:red">*</span>', align: 'center', width: 100},
+                        {field: 'projectName', title: '<b>项目名称</b><span style= "color:red">*</span>', align: 'center', width: 400},
+                        {field: 'productTime', title: '<b>投产时间</b><span style= "color:red">*</span>', align: 'center', width: 100},
+                        {field: 'engineerVoltageLevel', title: '工程电压等级', align: 'center', editor: "textbox", width: 100},
+                        {field: 'engineerProperty', title: '工程性质', align: 'center', editor: "textbox", width: 80},
+                        {field: 'constructionProperty', title: '建设性质', align: 'center', editor: "textbox", width: 150},
+                        {field: 'startTime', title: '开工时间', align: 'center', editor: "datebox", width: 150},
+                        {field: 'projectFirstreviewTime', title: '项目初设评审时间', align: 'center', editor: "datebox", width: 150},
+                        {field: 'projectManager', title: '项目经理', align: 'center', editor: "textbox", width: 80},
+                        {field: 'projectPhone', title: '联系电话', align: 'center', editor: "textbox", width: 100},
+                        {field: 'updateTime', title: '更新时间', align: 'center', width: 150},
+                        {field: 'createTime', title: '创建时间', align: 'center', width: 150}
+                    ]],
+
+            onLoadSuccess: function () {
+                $(".searchcls").linkbutton({text: '查看', plain: true, iconCls: 'icon-search'});
+                $(".link").linkbutton({text: '挂接', plain: true, iconCls: 'glyphicon-link icon-green'});
+                $(".import").linkbutton({text: '导入', plain: true, iconCls: 'glyphicon-import icon-green'});
+                // $('#cancel').hide();
+            }
+        });
+    });
+
+    /**
+     * 导入
+     */
+    function toImport() {
+        parent.$.modalDialog({
+            title: '请选择要导入的Excel文件:',
+            width: 400,
+            height: 200,
+            href: basePath + '/excel/toImport?type=projectMilestone',
+            buttons: [{
+                text: '确定',
+                handler: function () {
+                    parent.$.modalDialog.openner_dataGrid = projectMilestoneDataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+                    var f = parent.$.modalDialog.handler.find('#importExcelForm');
+                    f.submit();
+                }
+            }]
+        });
+    }
+
+    /**
+     * 条件查询
+     */
+    function searchProjectMilestone() {
+        projectMilestoneDataGrid.datagrid("load", {
+            projectName: $("#projectName").val(),
+            engineerName: $("#engineerName").val(),
+            projectManager: $("#projectManager").val()
+        });
+    }
+
+</script>
+
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'north',border:false" style="margin-left: 20px;">
+        <form>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            项目名称： <input class="easyui-textbox" id="projectName" style="width:200px;height: 25px" placeholder="">
+            工程名称： <input class="easyui-textbox" id="engineerName" style="width:200px;height: 25px" placeholder="">
+            项目经理： <input class="easyui-textbox" id="projectManager" style="width:100px;height: 25px" placeholder="">
+            <a href="javascript:searchProjectMilestone()" class="easyui-linkbutton" iconCls="icon-search" style="width:70px;height: 35px">搜&nbsp;索</a>
+        </form>
+    </div>
+
+    <div data-options="region:'center',border:true,title:'项目里程碑'">
+        <table id="projectMilestoneDataGrid" style="height: auto;width: 100%"></table>
+    </div>
+</div>
+
+</body>

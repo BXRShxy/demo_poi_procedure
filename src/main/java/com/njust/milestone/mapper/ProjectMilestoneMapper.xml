@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.njust.milestone.mapper.ProjectMilestoneMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.njust.milestone.entity.ProjectMilestone">
+        <id column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="project_code" property="projectCode"/>
+        <result column="project_name" property="projectName"/>
+        <result column="engineer_code" property="engineerCode"/>
+        <result column="engineer_name" property="engineerName"/>
+        <result column="engineer_voltage_level" property="engineerVoltageLevel"/>
+        <result column="engineer_property" property="engineerProperty"/>
+        <result column="construction_property" property="constructionProperty"/>
+        <result column="start_time" property="startTime"/>
+        <result column="incontroller_start_time" property="incontrollerStartTime"/>
+        <result column="project_keyan_audit_time" property="projectKeyanAuditTime"/>
+        <result column="project_approval_time" property="projectApprovalTime"/>
+        <result column="project_firstreview_time" property="projectFirstreviewTime"/>
+        <result column="material_calibration_time" property="materialCalibrationTime"/>
+        <result column="product_time" property="productTime"/>
+        <result column="completion_settlement" property="completionSettlement"/>
+        <result column="project_manager" property="projectManager"/>
+        <result column="project_phone" property="projectPhone"/>
+        <result column="construction_manager" property="constructionManager"/>
+        <result column="construction_phone" property="constructionPhone"/>
+        <result column="remark" property="remark"/>
+        <result column="last_operator" property="lastOperator"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, code, project_code, project_name, engineer_code, engineer_name, engineer_voltage_level, engineer_property,
+        construction_property, start_time, incontroller_start_time, project_keyan_audit_time, project_approval_time,
+        project_firstreview_time, material_calibration_time, product_time, completion_settlement, project_manager,
+        project_phone, construction_manager, construction_phone, remark, last_operator, update_time, create_time
+    </sql>
+
+    <select id="listOfPage" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from lcb_project_milestone as a
+        <where>
+            <if test="projectName!=null and projectName!=''">
+                AND project_name like "%${projectName}%"
+            </if>
+            <if test="engineerName!=null and engineerName!=''">
+                AND engineer_name like "%${engineerName}%"
+            </if>
+            <if test="projectManager!=null and projectManager!=''">
+                AND project_manager like "%${projectManager}%"
+            </if>
+        </where>
+        order by a.create_time desc , a.engineer_code asc
+        limit #{start} ,#{end}
+    </select>
+
+    <select id="totalOfList" resultType="java.lang.Long">
+        SELECT COUNT(engineer_code) from lcb_project_milestone
+        <where>
+            <if test="projectName!=null and projectName!=''">
+                AND project_name like "%${projectName}%"
+            </if>
+            <if test="engineerName!=null and engineerName!=''">
+                AND engineer_name like "%${engineerName}%"
+            </if>
+            <if test="projectManager!=null and projectManager!=''">
+                AND project_manager like "%${projectManager}%"
+            </if>
+        </where>
+    </select>
+    
+</mapper>
